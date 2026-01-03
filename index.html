@@ -237,31 +237,6 @@
   }
   .search input::placeholder{ color: rgba(242,243,255,.50); }
 
-  .pillbar{ display:flex; gap: 8px; flex: 0 0 auto; overflow:auto; padding-bottom: 2px; }
-  .pill{
-    border:none;
-    cursor:pointer;
-    padding: 10px 12px;
-    border-radius: 999px;
-    color: var(--text);
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.10);
-    font-weight: 700;
-    font-size: 13px;
-    transition: transform .16s var(--ease), background .16s var(--ease), border-color .16s var(--ease);
-    outline:none;
-    white-space:nowrap;
-  }
-  .pill:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.14); }
-  .pill[aria-selected="true"]{
-    background:
-      radial-gradient(120px 60px at 20% 20%, rgba(255,255,255,.20), transparent 55%),
-      linear-gradient(135deg, rgba(255,77,77,.85), rgba(255,176,32,.78));
-    border-color: rgba(255,255,255,.18);
-    color: #0a0a0f;
-  }
-  .pill:focus-visible{ box-shadow: var(--ring); }
-
   .content{
     display:grid;
     grid-template-columns: 1fr;
@@ -270,20 +245,6 @@
     padding-bottom: 140px;
     overflow:auto;
     max-height: calc(min(86vh, 860px) - 150px);
-  }
-  @media (min-width: 860px){
-    .content{
-      grid-template-columns: 1.2fr .8fr;
-      max-height: calc(min(86vh, 860px) - 148px);
-    }
-    .side{
-      display: flex;
-    }
-  }
-  @media (max-width: 859px){
-    .side{
-      display: none;
-    }
   }
 
   .panel{
@@ -340,12 +301,6 @@
   .method:active{ transform: translateY(1px) scale(.995); }
   .method:focus-visible{ box-shadow: var(--ring); }
 
-  .method[aria-disabled="true"]{
-    opacity:.55;
-    cursor:not-allowed;
-    transform:none !important;
-  }
-
   .m-left{ display:flex; align-items:center; gap: 12px; min-width: 0; }
   .m-icon{
     width: 42px; height: 42px;
@@ -359,7 +314,6 @@
   }
   .m-text{ display:flex; flex-direction:column; gap: 2px; min-width:0; }
   .m-name{ font-weight: 800; font-size: 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .m-desc{ font-size: 12px; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
   .m-right{ display:flex; align-items:center; gap: 10px; flex-shrink:0; }
   .badge{
@@ -371,25 +325,9 @@
     border: 1px solid rgba(255,255,255,.12);
     background: rgba(255,255,255,.06);
   }
-  .badge.soon{ border-color: rgba(255,176,32,.28); background: rgba(255,176,32,.10); color: rgba(255,235,200,.95); }
   .badge.free{ border-color: rgba(56,211,159,.28); background: rgba(56,211,159,.10); color: rgba(195,255,235,.95); }
   .badge.pop{ border-color: rgba(124,77,255,.28); background: rgba(124,77,255,.12); color: rgba(230,220,255,.98); }
   .chev{ width: 18px; height: 18px; opacity:.9; }
-
-  .side{ padding: 14px; display:flex; flex-direction:column; align-items:center; gap: 12px; }
-  .stat{
-    border: 1px solid rgba(255,255,255,.10);
-    background: rgba(255,255,255,.05);
-    border-radius: 16px;
-    padding: 12px;
-    display:flex;
-    flex-direction:column;
-    gap: 6px;
-  }
-  .stat .label{ font-size: 12px; color: var(--muted2); }
-  .stat .value{ font-weight: 900; }
-  .stat .hint{ font-size: 12px; color: var(--muted); line-height: 1.35; word-break: break-word; }
-  .stat code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 11px; }
 
   .toast{
     position: fixed;
@@ -414,28 +352,29 @@
   }
   .toast[data-show="true"]{ opacity: 1; transform: translateX(-50%) translateY(0); }
 
-  /* Details drawer inside modal */
+  /* Details drawer inside modal (MAKE IT OPAQUE, NOT TRANSPARENT) */
   .details{
-  position:absolute;
-  left:0; right:0; bottom:0;
-  display:none;
-  padding: 14px 18px 18px 18px;
-  background: rgba(0,0,0,.22);
-  border-top: 1px solid var(--stroke2);
-  max-height: 77%;
-  overflow:auto;
-  z-index: 60;
-}
-.details[data-open="true"]{ display:block; }
+    position:absolute;
+    left:0; right:0; bottom:0;
+    display:none;
+    padding: 14px 18px 18px 18px;
+    background: linear-gradient(180deg, rgba(15,17,26,.98), rgba(10,10,15,.98));
+    border-top: 1px solid var(--stroke2);
+    max-height: 70%;
+    overflow:auto;
+    z-index: 60;
+  }
+  .details[data-open="true"]{ display:block; }
 
   .details-card{
-    border: 1px solid rgba(255,255,255,.10);
-    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(8,9,14,.96);
     border-radius: 18px;
     padding: 14px;
     display:flex;
     flex-direction:column;
     gap: 10px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.55);
   }
   .details-head{
     display:flex;
@@ -463,10 +402,10 @@
     line-height: 1.45;
     white-space: pre-wrap;
     word-break: break-word;
-    border: 1px dashed rgba(255,255,255,.14);
+    border: 1px solid rgba(255,255,255,.12);
     border-radius: 14px;
     padding: 10px;
-    background: rgba(0,0,0,.18);
+    background: rgba(6,7,12,.98);
   }
   .details-actions{
     display:flex;
@@ -525,8 +464,6 @@
         </span>
       </button>
       <a href="https://climate.stripe.com/WQWrpI" class="tagline" target="_blank" rel="noopener noreferrer">90% of a Stripe donation goes towards carbon removal</a>
-
-      <!-- Clear statement added to homepage -->
       <p class="tagline" style="margin-top:8px;">This site automatically splits your donations among recommended charities.</p>
     </div>
   </main>
@@ -535,9 +472,9 @@
     <div class="modal" role="document">
       <header class="modal-header">
         <div class="modal-title">
-            <h2 id="donateTitle">Choose your donation method</h2>
-            <p id="donateDesc">Select a method that works best for you.</p>
-          </div>
+          <h2 id="donateTitle">Choose your donation method</h2>
+          <p id="donateDesc">Select a method that works best for you.</p>
+        </div>
         <div class="top-actions">
           <button id="closeDonate" class="icon-btn" type="button" aria-label="Close">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -555,7 +492,6 @@
           </svg>
           <input id="searchInput" type="search" placeholder="Search… e.g. card, paypal, crypto, bank" autocomplete="off" />
         </label>
-
       </div>
 
       <div class="content">
@@ -600,8 +536,8 @@
 <script>
 (() => {
   const CONFIG = {
-    STRIPE_CHECKOUT_URL: "https://donate.stripe.com/7sYeVcdFk12iamX919dEs00",  // e.g. "https://buy.stripe.com/xxxx"
-    PAYPAL_URL: "https://www.paypal.com/ncp/payment/UYCBREGFZNGA2",           // e.g. "https://www.paypal.com/donate/?hosted_button_id=XXXX"
+    STRIPE_CHECKOUT_URL: "https://donate.stripe.com/7sYeVcdFk12iamX919dEs00",
+    PAYPAL_URL: "https://www.paypal.com/ncp/payment/UYCBREGFZNGA2",
     GOOGLE_PAY_URL: "",
 
     GOFUNDME_URL: "https://www.gofundme.com/f/oxford100arcticexpeditions/donate?source=anythingcounts.netlify.app",
@@ -621,7 +557,7 @@ Reference: Donation`,
     CRYPTO_DETAILS: `BTC: your-bitcoin-address-here
 ETH: your-eth-address-here`,
 
-    QR_IMAGE_URL: "/qrcode.png" // e.g. "https://your-site.com/qr.png"
+    QR_IMAGE_URL: "/qrcode.png"
   };
 
   const METHODS = [
@@ -632,7 +568,7 @@ ETH: your-eth-address-here`,
       action:{ type:"link", urlKey:"PAYPAL_URL" } },
 
     { id:"qr", name:"QR Code Scan", desc:"Shows a QR image (if you set one).", category:"direct", badge:"Fast", badgeKind:"free", tags:["qr","scan"], icon:"qr",
-      action:{ type:"modal", title:"Scan to donate", subtitle:"Use your camera app or banking app.", bodyKey:"__QR__" } },
+      action:{ type:"modal", title:"Scan to donate", subtitle:"Use your camera or a QR code scanner.", bodyKey:"__QR__" } },
 
     { id:"gofundme", name:"GoFundMe", desc:"Crowdfunding page link.", category:"platform", badge:"Platform", badgeKind:"free", tags:["gofundme"], icon:"platform",
       action:{ type:"link", urlKey:"GOFUNDME_URL" } },
@@ -659,7 +595,6 @@ ETH: your-eth-address-here`,
       action:{ type:"link", urlKey:"EVENTBRITE_URL" } }
   ];
 
-  // ---- DOM (DECLARED ONCE) ----
   const overlay = document.getElementById("donateOverlay");
   const openBtn = document.getElementById("openDonate");
   const closeBtn = document.getElementById("closeDonate");
@@ -681,48 +616,51 @@ ETH: your-eth-address-here`,
   let lastFocus = null;
   let toastTimer = null;
 
-  // ---- Icons ----
   const ICONS = {
     card: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 8.2h17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 5h14a2.5 2.5 0 0 1 2.5 2.5v9A2.5 2.5 0 0 1 19 19H5A2.5 2.5 0 0 1 2.5 16.5v-9A2.5 2.5 0 0 1 5 5Z" stroke="currentColor" stroke-width="2"/><path d="M6.5 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
     paypal: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 20h3.3a4.7 4.7 0 0 0 4.6-3.7l.7-3.4A4 4 0 0 0 11.7 8H8.2L7 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8.2 9.6 5.4A3 3 0 0 1 12.5 3H15a4 4 0 0 1 3.9 4.8l-.4 1.9A4.3 4.3 0 0 1 14.3 13H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-    gpay: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 7.5h10a3.5 3.5 0 0 1 0 7H10.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.5 14.5H7.8A2.8 2.8 0 0 0 5 17.3V20h5.5v-5.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 11h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`,
-    bank: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 10v8M10 10v8M14 10v8M18 10v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 10 12 4l9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-    crypto: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.2 6.2h6.6a3 3 0 0 1 0 6H8.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.2 12.2h7a3.2 3.2 0 0 1 0 6.4H8.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
     qr: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 14h2v2h-2v-2Zm4 0h2v6h-6v-2h4v-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 18h2v2h-2v-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
-    platform: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M7 7v12M17 7v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6.5 19h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 11h6M9 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-    spark: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l1.2 5.2L18 9l-4.8 1.8L12 16l-1.2-5.2L6 9l4.8-1.8L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19 14l.7 2.4L22 17l-2.3.6L19 20l-.7-2.4L16 17l2.3-.6L19 14Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`
+    platform: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M7 7v12M17 7v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6.5 19h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 11h6M9 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`
   };
+
+  function escapeHTML(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+  function escapeAttr(str){
+    return escapeHTML(str).replaceAll("`","&#096;");
+  }
 
   function badgeHTML(m){
     if (!m.badge) return "";
     return `<span class="badge ${m.badgeKind || ""}">${escapeHTML(m.badge)}</span>`;
   }
 
-    function methodCard(m){
-      const icon = ICONS[m.icon] || ICONS.platform;
-      const disabled = (m.action?.type === "disabled") || (m.badgeKind === "soon");
-      return `<button class="method" type="button"
-    data-id="${escapeAttr(m.id)}"
-    data-category="${escapeAttr(m.category)}"
-    data-name="${escapeAttr(m.name)}"
-    data-desc="${escapeAttr(m.desc)}"
-    data-tags="${escapeAttr((m.tags||[]).join(" "))}"
-    ${disabled ? `aria-disabled="true" tabindex="-1"` : ``}
-  >
-    <span class="m-left">
-      <span class="m-icon" aria-hidden="true">${icon}</span>
-      <span class="m-text">
-        <span class="m-name">${escapeHTML(m.name)}</span>
-      </span>
-    </span>
-        <span class="m-right">
-          ${badgeHTML(m)}
-          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+  function methodCard(m){
+    const icon = ICONS[m.icon] || ICONS.platform;
+    return `<button class="method" type="button"
+      data-id="${escapeAttr(m.id)}"
+      data-name="${escapeAttr(m.name)}"
+      data-desc="${escapeAttr(m.desc)}"
+      data-tags="${escapeAttr((m.tags||[]).join(" "))}"
+    >
+      <span class="m-left">
+        <span class="m-icon" aria-hidden="true">${icon}</span>
+        <span class="m-text">
+          <span class="m-name">${escapeHTML(m.name)}</span>
         </span>
-      </button>
-    `;
+      </span>
+      <span class="m-right">
+        ${badgeHTML(m)}
+        <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>`;
   }
 
   function render(){
@@ -731,7 +669,6 @@ ETH: your-eth-address-here`,
     applyFilters();
   }
 
-
   function applyFilters(){
     const q = (searchInput.value || "").trim().toLowerCase();
     const cards = Array.from(listEl.querySelectorAll(".method"));
@@ -739,9 +676,7 @@ ETH: your-eth-address-here`,
 
     for (const el of cards){
       const hay = `${el.dataset.name||""} ${el.dataset.desc||""} ${el.dataset.tags||""}`.toLowerCase();
-      const qOK = q ? hay.includes(q) : true;
-      const show = qOK;
-
+      const show = q ? hay.includes(q) : true;
       el.style.display = show ? "" : "none";
       if (show) visible++;
     }
@@ -756,68 +691,6 @@ ETH: your-eth-address-here`,
     toastTimer = setTimeout(() => { toast.dataset.show = "false"; }, 2600);
   }
 
-  async function copyText(text){
-    try{
-      if (navigator.clipboard && window.isSecureContext){
-        await navigator.clipboard.writeText(text);
-        return true;
-      }
-    }catch(_){}
-    try{
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.left = "-9999px";
-      ta.style.top = "0";
-      document.body.appendChild(ta);
-      ta.focus();
-      ta.select();
-      const ok = document.execCommand("copy");
-      document.body.removeChild(ta);
-      return !!ok;
-    }catch(_){
-      return false;
-    }
-  }
-
-  function openDetails(title, subtitle, body, actions){
-    detailsTitle.textContent = title;
-    detailsSubtitle.textContent = subtitle;
-    detailsBody.textContent = body;
-    detailsActions.innerHTML = "";
-
-    actions.forEach(act => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "mini-btn";
-      b.textContent = act.label;
-
-      if (act.kind === "link"){
-        b.addEventListener("click", () => { window.open(act.url, "_blank", "noopener,noreferrer"); });
-      } else if (act.kind === "copy"){
-        b.addEventListener("click", async () => {
-          const ok = await copyText(act.text);
-          showToast(ok ? "Copied" : "Copy failed", ok ? "Copied to clipboard." : "Clipboard blocked.");
-        });
-      }
-      detailsActions.appendChild(b);
-    });
-
-    if (!actions.length){
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "mini-btn secondary";
-      b.textContent = "Copy";
-      b.addEventListener("click", async () => {
-        const ok = await copyText(detailsBody.textContent || "");
-        showToast(ok ? "Copied" : "Copy failed", ok ? "Copied to clipboard." : "Clipboard blocked.");
-      });
-      detailsActions.appendChild(b);
-    }
-
-    details.dataset.open = "true";
-  }
-
   function closeDetails(){
     details.dataset.open = "false";
   }
@@ -825,19 +698,14 @@ ETH: your-eth-address-here`,
   function attachHandlers(){
     const cards = Array.from(listEl.querySelectorAll(".method"));
     cards.forEach(btn => {
-      btn.addEventListener("click", async () => {
+      btn.addEventListener("click", () => {
         const id = btn.dataset.id;
         const m = METHODS.find(x => x.id === id);
         if (!m) return;
 
-        if (btn.getAttribute("aria-disabled") === "true"){
-          showToast("Coming soon", `${m.name} isn’t wired up yet.`);
-          return;
-        }
-
         const a = m.action || {};
         if (a.type === "link"){
-          const url = CONFIG[a.urlKey] || "";
+          const url = (CONFIG[a.urlKey] || "").trim();
           if (!url){
             showToast("Missing URL", `Paste a link into CONFIG.${a.urlKey}`);
             return;
@@ -847,65 +715,46 @@ ETH: your-eth-address-here`,
         }
 
         if (a.type === "modal"){
+          // QR ONLY: no "Open QR image" and no "Copy QR URL" buttons.
           if (a.bodyKey === "__QR__"){
             const qr = (CONFIG.QR_IMAGE_URL || "").trim();
             if (!qr){
-              openDetails("QR not set", "Add CONFIG.QR_IMAGE_URL", "No QR image URL found.\n\nSet CONFIG.QR_IMAGE_URL to a hosted PNG/JPG.", []);
+              detailsTitle.textContent = "QR not set";
+              detailsSubtitle.textContent = "Add CONFIG.QR_IMAGE_URL";
+              detailsBody.textContent = "No QR image URL found.\n\nSet CONFIG.QR_IMAGE_URL to a hosted PNG/JPG.";
+              detailsActions.innerHTML = "";
+              details.dataset.open = "true";
               return;
             }
+
             detailsTitle.textContent = "Scan to donate";
             detailsSubtitle.textContent = "Use your camera or a QR code scanner.";
-            detailsBody.innerHTML = `
-  <div style="display:flex;justify-content:center;align-items:center;padding:10px;">
-    <img
-      src="${escapeAttr(qr)}"
-      alt="QR code"
-      style="
-        width: min(260px, 70vw);
-        height: auto;
-        aspect-ratio: 1 / 1;
-        object-fit: contain;
-        border-radius: 14px;
-        box-shadow: 0 10px 30px rgba(0,0,0,.35);
-        border: 1px solid rgba(255,255,255,.12);
-        background: rgba(0,0,0,.18);
-      "
-    />
-  </div>
-`;
 
-            detailsActions.innerHTML = "";
-            const b1 = document.createElement("button");
-            b1.type = "button";
-            b1.className = "mini-btn";
-            b1.textContent = "Open QR image";
-            b1.addEventListener("click", () => { window.open(qr, "_blank", "noopener,noreferrer"); });
-            detailsActions.appendChild(b1);
-            const b2 = document.createElement("button");
-            b2.type = "button";
-            b2.className = "mini-btn";
-            b2.textContent = "Copy QR URL";
-            b2.addEventListener("click", async () => {
-              const ok = await copyText(qr);
-              showToast(ok ? "Copied" : "Copy failed", ok ? "Copied to clipboard." : "Clipboard blocked.");
-            });
-            detailsActions.appendChild(b2);
+            detailsBody.innerHTML = `
+              <div style="display:flex;justify-content:center;align-items:center;padding:12px;">
+                <img
+                  src="${escapeAttr(qr)}"
+                  alt="QR code"
+                  style="
+                    width: min(320px, 78vw);
+                    aspect-ratio: 1 / 1;
+                    object-fit: contain;
+                    border-radius: 14px;
+                    border: 1px solid rgba(255,255,255,.14);
+                    background: #0b0d16;
+                    display:block;
+                  "
+                />
+              </div>
+            `;
+
+            detailsActions.innerHTML = "";   /* <- nukes Open/Copy buttons */
             details.dataset.open = "true";
             details.scrollIntoView({ behavior: "smooth", block: "end" });
             return;
           }
 
-          const body = CONFIG[a.bodyKey] || "";
-          if (!body){
-            showToast("Missing details", `Fill CONFIG.${a.bodyKey}`);
-            return;
-          }
-
-          const actions = [];
-          if (a.copyLabel){
-            actions.push({ kind:"copy", label: a.copyLabel, text: body });
-          }
-          openDetails(a.title || m.name, a.subtitle || m.desc, body, actions);
+          showToast("Not wired", "That modal type isn’t set up yet.");
           return;
         }
 
@@ -931,19 +780,6 @@ ETH: your-eth-address-here`,
     if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
   }
 
-  function escapeHTML(str){
-    return String(str)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-  function escapeAttr(str){
-    return escapeHTML(str).replaceAll("`","&#096;");
-  }
-
-  // ---- Events (using existing consts, NOT redeclaring) ----
   openBtn.addEventListener("click", openModal);
   closeBtn.addEventListener("click", closeModal);
   detailsClose.addEventListener("click", closeDetails);
@@ -958,7 +794,6 @@ ETH: your-eth-address-here`,
 
   searchInput.addEventListener("input", applyFilters);
 
-  // ---- Init ----
   render();
 })();
 </script>
