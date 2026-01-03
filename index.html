@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="color-scheme" content="dark" />
+<title>Anything Counts</title>
+
+<style>
+  :root{
+    --bg0:#0a0a0f;
+    --bg1:#0f111a;
+    --stroke:rgba(255,255,255,.10);
+    --stroke2:rgba(255,255,255,.06);
+    --text:#f2f3ff;
+    --muted:rgba(242,243,255,.72);
+    --muted2:rgba(242,243,255,.55);
+    --accent1:#ff4d4d;
+    --accent2:#ffb020;
+    --shadow: 0 18px 70px rgba(0,0,0,.55);
+    --shadow2: 0 10px 40px rgba(0,0,0,.45);
+    --radius: 20px;
+    --blur: 18px;
+    --ring: 0 0 0 3px rgba(255,176,32,.22), 0 0 0 1px rgba(255,255,255,.10) inset;
+    --ease: cubic-bezier(.2,.9,.2,1);
+    --ease2: cubic-bezier(.2,.8,.2,1);
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:var(--font);
+    color:var(--text);
+    background:
+      radial-gradient(1200px 800px at 20% 20%, rgba(124,77,255,.20), transparent 60%),
+      radial-gradient(900px 700px at 80% 30%, rgba(255,176,32,.20), transparent 60%),
+      radial-gradient(800px 700px at 70% 85%, rgba(255,77,77,.18), transparent 60%),
+      linear-gradient(180deg, var(--bg0), var(--bg1));
+    overflow:hidden;
+  }
+  .bg-grid{
+    position:fixed; inset:-2px;
+    background:
+      linear-gradient(to right, rgba(255,255,255,.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(closest-side at 50% 50%, rgba(0,0,0,.9), transparent 92%);
+    opacity:.35;
+    pointer-events:none;
+  }
+  .bg-noise{
+    position:fixed; inset:0;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+    opacity:.18;
+    mix-blend-mode: overlay;
+    pointer-events:none;
+  }
+  .orbs{ position:fixed; inset:0; pointer-events:none; filter: blur(36px); opacity:.9; }
+  .orb{
+    position:absolute;
+    width: 420px; height: 420px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 60%),
+                radial-gradient(circle at 60% 70%, rgba(255,255,255,.12), transparent 55%),
+                linear-gradient(135deg, rgba(255,77,77,.75), rgba(255,176,32,.70));
+    animation: float1 12s var(--ease) infinite;
+    will-change: transform;
+  }
+  .orb.o2{
+    width: 520px; height: 520px;
+    left: 58%; top: 18%;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.30), transparent 60%),
+                radial-gradient(circle at 60% 70%, rgba(255,255,255,.10), transparent 55%),
+                linear-gradient(135deg, rgba(124,77,255,.80), rgba(255,176,32,.55));
+    animation: float2 14s var(--ease2) infinite;
+  }
+  .orb.o1{ left: 10%; top: 56%; }
+  @keyframes float1{
+    0%,100%{ transform: translate(0,0) scale(1) }
+    35%{ transform: translate(80px,-65px) scale(1.03) }
+    70%{ transform: translate(-40px,-120px) scale(.98) }
+  }
+  @keyframes float2{
+    0%,100%{ transform: translate(0,0) scale(1) }
+    40%{ transform: translate(-90px,80px) scale(1.05) }
+    75%{ transform: translate(-10px,-70px) scale(.98) }
+  }
+
+  .stage{
+    position:relative;
+    height:100%;
+    display:grid;
+    place-items:center;
+    padding: 24px;
+  }
+  .cta-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    z-index:2;
+  }
+  .tagline{
+    font-size: 14px;
+    color: var(--muted);
+    letter-spacing:.25px;
+    text-align:center;
+    max-width: 520px;
+  }
+  .donate-btn{
+    appearance:none;
+    border:none;
+    background:
+      radial-gradient(120px 60px at 20% 20%, rgba(255,255,255,.25), transparent 55%),
+      linear-gradient(135deg, var(--accent1), var(--accent2));
+    color: #0a0a0f;
+    font-weight: 800;
+    letter-spacing:.2px;
+    padding: 18px 26px;
+    border-radius: 999px;
+    cursor:pointer;
+    box-shadow:
+      0 14px 40px rgba(255,77,77,.22),
+      0 10px 30px rgba(255,176,32,.18),
+      0 0 0 1px rgba(255,255,255,.16) inset;
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    transition: transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease);
+    outline:none;
+  }
+  .donate-btn:hover{ transform: translateY(-2px) scale(1.03); }
+  .donate-btn:active{ transform: translateY(1px) scale(.99); }
+  .donate-btn:focus-visible{ box-shadow: var(--shadow2), var(--ring); }
+  .donate-icon{
+    width: 28px; height: 28px;
+    display:grid;
+    place-items:center;
+    border-radius: 10px;
+    background: rgba(10,10,15,.18);
+    box-shadow: 0 0 0 1px rgba(10,10,15,.22) inset;
+  }
+  .donate-title{ display:flex; flex-direction:column; line-height:1.05; }
+  .donate-title span:first-child{ font-size: 18px; }
+  .donate-title span:last-child{ font-size: 12px; font-weight: 700; opacity:.75; letter-spacing:.35px; }
+
+  .overlay{
+    position:fixed; inset:0;
+    background: rgba(0,0,0,.62);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding: 22px;
+    z-index: 50;
+  }
+  .overlay[data-open="true"]{ display:flex; }
+  .overlay::before{
+    content:"";
+    position:absolute; inset:0;
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+  }
+
+  .modal{
+    position:relative;
+    width: min(980px, 100%);
+    max-height: min(86vh, 860px);
+    border-radius: var(--radius);
+    background:
+      radial-gradient(900px 500px at 20% 0%, rgba(124,77,255,.22), transparent 55%),
+      radial-gradient(900px 500px at 100% 20%, rgba(255,176,32,.18), transparent 55%),
+      linear-gradient(180deg, rgba(18,21,40,.78), rgba(12,14,28,.78));
+    box-shadow: var(--shadow);
+    border: 1px solid var(--stroke);
+    overflow:hidden;
+    transform: translateY(14px) scale(.98);
+    opacity:0;
+    transition: transform .24s var(--ease), opacity .24s var(--ease);
+  }
+  .overlay[data-open="true"] .modal{ transform: translateY(0) scale(1); opacity:1; }
+
+  .modal-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap: 12px;
+    padding: 18px 18px 14px 18px;
+    border-bottom: 1px solid var(--stroke2);
+  }
+  .modal-title{ display:flex; flex-direction:column; gap: 6px; min-width:0; }
+  .modal-title h2{ margin:0; font-size: 18px; letter-spacing:.2px; }
+  .modal-title p{ margin:0; color: var(--muted); font-size: 13px; line-height: 1.35; max-width: 60ch; }
+
+  .top-actions{ display:flex; align-items:center; gap: 10px; flex-shrink:0; }
+  .icon-btn{
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke2);
+    background: rgba(255,255,255,.06);
+    color: var(--text);
+    cursor:pointer;
+    display:grid;
+    place-items:center;
+    transition: transform .16s var(--ease), background .16s var(--ease), border-color .16s var(--ease);
+    outline:none;
+  }
+  .icon-btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.12); }
+  .icon-btn:active{ transform: translateY(1px) scale(.98); }
+  .icon-btn:focus-visible{ box-shadow: var(--ring); }
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 10px;
+    padding: 12px 18px 14px 18px;
+    border-bottom: 1px solid var(--stroke2);
+  }
+  .search{
+    flex: 1 1 260px;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: rgba(0,0,0,.24);
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.2) inset;
+  }
+  .search input{
+    width:100%;
+    border:none;
+    outline:none;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+  }
+  .search input::placeholder{ color: rgba(242,243,255,.50); }
+
+  .pillbar{ display:flex; gap: 8px; flex: 0 0 auto; overflow:auto; padding-bottom: 2px; }
+  .pill{
+    border:none;
+    cursor:pointer;
+    padding: 10px 12px;
+    border-radius: 999px;
+    color: var(--text);
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.10);
+    font-weight: 700;
+    font-size: 13px;
+    transition: transform .16s var(--ease), background .16s var(--ease), border-color .16s var(--ease);
+    outline:none;
+    white-space:nowrap;
+  }
+  .pill:hover{ transform: translateY(-1px); background: rgba(255,255,255,.09); border-color: rgba(255,255,255,.14); }
+  .pill[aria-selected="true"]{
+    background:
+      radial-gradient(120px 60px at 20% 20%, rgba(255,255,255,.20), transparent 55%),
+      linear-gradient(135deg, rgba(255,77,77,.85), rgba(255,176,32,.78));
+    border-color: rgba(255,255,255,.18);
+    color: #0a0a0f;
+  }
+  .pill:focus-visible{ box-shadow: var(--ring); }
+
+  .content{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 14px 18px 18px 18px;
+    overflow:auto;
+    max-height: calc(min(86vh, 860px) - 150px);
+  }
+  @media (min-width: 860px){
+    .content{
+      grid-template-columns: 1.2fr .8fr;
+      max-height: calc(min(86vh, 860px) - 148px);
+    }
+    .side{
+      display: flex;
+    }
+  }
+  @media (max-width: 859px){
+    .side{
+      display: none;
+    }
+  }
+
+  .panel{
+    border: 1px solid var(--stroke2);
+    background: rgba(0,0,0,.22);
+    border-radius: var(--radius);
+    overflow:hidden;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.22) inset;
+  }
+  .panel-head{
+    padding: 14px 14px 10px 14px;
+    border-bottom: 1px solid var(--stroke2);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+  }
+  .panel-head h3{ margin:0; font-size: 14px; letter-spacing:.2px; }
+  .panel-head .count{
+    font-size: 12px;
+    color: var(--muted2);
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.05);
+    padding: 6px 10px;
+    border-radius: 999px;
+    white-space:nowrap;
+  }
+
+  .list{ padding: 10px; display:grid; gap: 10px; }
+
+  .method{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+    padding: 12px 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,.10);
+    background:
+      radial-gradient(120px 60px at 20% 20%, rgba(255,255,255,.12), transparent 60%),
+      rgba(255,255,255,.05);
+    cursor:pointer;
+    transition: transform .16s var(--ease), background .16s var(--ease), border-color .16s var(--ease);
+    user-select:none;
+    outline:none;
+  }
+  .method:hover{
+    transform: translateY(-1px);
+    background:
+      radial-gradient(120px 60px at 20% 20%, rgba(255,255,255,.16), transparent 60%),
+      rgba(255,255,255,.07);
+    border-color: rgba(255,255,255,.14);
+  }
+  .method:active{ transform: translateY(1px) scale(.995); }
+  .method:focus-visible{ box-shadow: var(--ring); }
+
+  .method[aria-disabled="true"]{
+    opacity:.55;
+    cursor:not-allowed;
+    transform:none !important;
+  }
+
+  .m-left{ display:flex; align-items:center; gap: 12px; min-width: 0; }
+  .m-icon{
+    width: 42px; height: 42px;
+    border-radius: 14px;
+    display:grid;
+    place-items:center;
+    background: rgba(0,0,0,.24);
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: 0 0 0 1px rgba(0,0,0,.20) inset;
+    flex-shrink:0;
+  }
+  .m-text{ display:flex; flex-direction:column; gap: 2px; min-width:0; }
+  .m-name{ font-weight: 800; font-size: 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .m-desc{ font-size: 12px; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+  .m-right{ display:flex; align-items:center; gap: 10px; flex-shrink:0; }
+  .badge{
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing:.25px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+  }
+  .badge.soon{ border-color: rgba(255,176,32,.28); background: rgba(255,176,32,.10); color: rgba(255,235,200,.95); }
+  .badge.free{ border-color: rgba(56,211,159,.28); background: rgba(56,211,159,.10); color: rgba(195,255,235,.95); }
+  .badge.pop{ border-color: rgba(124,77,255,.28); background: rgba(124,77,255,.12); color: rgba(230,220,255,.98); }
+  .chev{ width: 18px; height: 18px; opacity:.9; }
+
+  .side{ padding: 14px; display:flex; flex-direction:column; align-items:center; gap: 12px; }
+  .stat{
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.05);
+    border-radius: 16px;
+    padding: 12px;
+    display:flex;
+    flex-direction:column;
+    gap: 6px;
+  }
+  .stat .label{ font-size: 12px; color: var(--muted2); }
+  .stat .value{ font-weight: 900; }
+  .stat .hint{ font-size: 12px; color: var(--muted); line-height: 1.35; word-break: break-word; }
+  .stat code{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 11px; }
+
+  .toast{
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%) translateY(18px);
+    opacity: 0;
+    pointer-events:none;
+    z-index: 100;
+    background: rgba(15,17,26,.88);
+    border: 1px solid rgba(255,255,255,.12);
+    box-shadow: var(--shadow2);
+    padding: 12px 14px;
+    border-radius: 16px;
+    min-width: min(540px, calc(100vw - 24px));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: transform .24s var(--ease), opacity .24s var(--ease);
+    display:flex;
+    align-items:flex-start;
+    gap: 10px;
+  }
+  .toast[data-show="true"]{ opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* Details drawer inside modal */
+  .details{
+    display:none;
+    border-top: 1px solid var(--stroke2);
+    padding: 14px 18px 18px 18px;
+    background: rgba(0,0,0,.18);
+  }
+  .details[data-open="true"]{ display:block; }
+  .details-card{
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(255,255,255,.05);
+    border-radius: 18px;
+    padding: 14px;
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+  }
+  .details-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap: 10px;
+  }
+  .details-title{
+    display:flex;
+    flex-direction:column;
+    gap: 3px;
+    min-width: 0;
+  }
+  .details-title .h{
+    font-weight: 950;
+    letter-spacing:.2px;
+  }
+  .details-title .s{
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .details-body{
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-break: break-word;
+    border: 1px dashed rgba(255,255,255,.14);
+    border-radius: 14px;
+    padding: 10px;
+    background: rgba(0,0,0,.18);
+  }
+  .details-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 10px;
+  }
+  .mini-btn{
+    border:none;
+    cursor:pointer;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-weight: 900;
+    color: #0a0a0f;
+    background: linear-gradient(135deg, rgba(255,77,77,.95), rgba(255,176,32,.9));
+    transition: transform .16s var(--ease);
+    outline:none;
+  }
+  .mini-btn:hover{ transform: translateY(-1px); }
+  .mini-btn:active{ transform: translateY(1px) scale(.99); }
+  .mini-btn.secondary{
+    background: rgba(255,255,255,.08);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,.12);
+  }
+  .mini-btn:focus-visible{ box-shadow: var(--ring); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    .orb{ display:none; }
+  }
+</style>
+</head>
+
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-noise" aria-hidden="true"></div>
+  <div class="orbs" aria-hidden="true">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+  </div>
+
+  <main class="stage">
+    <div class="cta-wrap">
+      <button id="openDonate" class="donate-btn" type="button" aria-haspopup="dialog" aria-controls="donateOverlay">
+        <span class="donate-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M21 8V7a2 2 0 0 0-2-2H5A2 2 0 0 0 3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-1" stroke="rgba(10,10,15,.9)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 9h9" stroke="rgba(10,10,15,.9)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 13h7" stroke="rgba(10,10,15,.9)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M17 12h4a2 2 0 0 0 0-4h-4a2 2 0 0 0 0 4Z" fill="rgba(10,10,15,.18)" stroke="rgba(10,10,15,.9)" stroke-width="2"/>
+          </svg>
+        </span>
+        <span class="donate-title">
+          <span>Anything Counts</span>
+          <span>pick a method • it’s quick</span>
+        </span>
+      </button>
+      <a href="https://climate.stripe.com/WQWrpI" class="tagline" target="_blank" rel="noopener noreferrer">90% of a Stripe donation goes towards carbon removal</a>
+
+      <!-- Clear statement added to homepage -->
+      <p class="tagline" style="margin-top:8px;">This site automatically splits your donations among recommended charities.</p>
+    </div>
+  </main>
+
+  <section id="donateOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="donateTitle" aria-describedby="donateDesc" data-open="false">
+    <div class="modal" role="document">
+      <header class="modal-header">
+        <div class="modal-title">
+            <h2 id="donateTitle">Choose your donation method</h2>
+            <p id="donateDesc">Select a method that works best for you.</p>
+          </div>
+        <div class="top-actions">
+          <button id="closeDonate" class="icon-btn" type="button" aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="controls">
+        <label class="search" aria-label="Search methods">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="searchInput" type="search" placeholder="Search… e.g. card, paypal, crypto, bank" autocomplete="off" />
+        </label>
+
+      </div>
+
+      <div class="content">
+        <section class="panel" aria-label="Methods">
+          <div class="panel-head">
+            <h3>Methods</h3>
+            <div class="count"><span id="visibleCount">0</span> shown</div>
+          </div>
+          <div class="list" id="methodList"></div>
+        </section>
+      </div>
+
+      <div id="details" class="details" data-open="false">
+        <div class="details-card">
+          <div class="details-head">
+            <div class="details-title">
+              <div class="h" id="detailsTitle">Details</div>
+              <div class="s" id="detailsSubtitle">Extra info</div>
+            </div>
+            <button class="mini-btn secondary" id="detailsClose" type="button">Close</button>
+          </div>
+          <div class="details-body" id="detailsBody"></div>
+          <div class="details-actions" id="detailsActions"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" data-show="false">
+    <div style="width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:rgba(255,176,32,.14);border:1px solid rgba(255,176,32,.22);flex-shrink:0;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2 3 6.5V12c0 5.25 3.5 10 9 10s9-4.75 9-10V6.5L12 2Z" stroke="rgba(255,235,200,.95)" stroke-width="2"/>
+        <path d="M8.5 12.2 11 14.7l4.8-5" stroke="rgba(255,235,200,.95)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+      <div style="font-weight:900;font-size:13px;" id="toastTitle">Done</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.35;" id="toastBody">—</div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const CONFIG = {
+    STRIPE_CHECKOUT_URL: "https://donate.stripe.com/7sYeVcdFk12iamX919dEs00",  // e.g. "https://buy.stripe.com/xxxx"
+    PAYPAL_URL: "https://www.paypal.com/ncp/payment/UYCBREGFZNGA2",           // e.g. "https://www.paypal.com/donate/?hosted_button_id=XXXX"
+    GOOGLE_PAY_URL: "",
+
+    GOFUNDME_URL: "https://www.gofundme.com/f/oxford100arcticexpeditions/donate?source=anythingcounts.netlify.app",
+    GIVINGWHEEL_URL: "https://gvwhl.com/GGSIL",
+    FUNRAISE_URL: "",
+    CLASSY_URL: "",
+    FUNDRAISEUP_URL: "",
+    ZEFFY_URL: "",
+    GIVELIVELY_URL: "",
+    EVENTBRITE_URL: "",
+
+    BANK_DETAILS: `Bank: YOUR BANK
+Name: YOUR NAME
+Account: 00-0000-0000000-00
+Reference: Donation`,
+
+    CRYPTO_DETAILS: `BTC: your-bitcoin-address-here
+ETH: your-eth-address-here`,
+
+    QR_IMAGE_URL: "qrcode.png" // e.g. "https://your-site.com/qr.png"
+  };
+
+  const METHODS = [
+    { id:"card", name:"Stripe", desc:"Opens your Stripe checkout link.", category:"direct", badge:"Popular", badgeKind:"pop", tags:["card","stripe","checkout"], icon:"card",
+      action:{ type:"link", urlKey:"STRIPE_CHECKOUT_URL" } },
+
+    { id:"paypal", name:"PayPal", desc:"Opens your PayPal donate link.", category:"direct", badge:"Popular", badgeKind:"pop", tags:["paypal","wallet"], icon:"paypal",
+      action:{ type:"link", urlKey:"PAYPAL_URL" } },
+
+    { id:"qr", name:"QR Code Scan", desc:"Shows a QR image (if you set one).", category:"direct", badge:"Fast", badgeKind:"free", tags:["qr","scan"], icon:"qr",
+      action:{ type:"modal", title:"Scan to donate", subtitle:"Use your camera app or banking app.", bodyKey:"__QR__" } },
+
+    { id:"gofundme", name:"GoFundMe", desc:"Crowdfunding page link.", category:"platform", badge:"Platform", badgeKind:"free", tags:["gofundme"], icon:"platform",
+      action:{ type:"link", urlKey:"GOFUNDME_URL" } },
+
+    { id:"givingwheel", name:"GivingWheel", desc:"Donation form link.", category:"platform", badge:"Platform", badgeKind:"free", tags:["donorbox"], icon:"platform",
+      action:{ type:"link", urlKey:"GIVINGWHEEL_URL" } },
+
+    { id:"funraise", name:"Funraise", desc:"Campaign link.", category:"platform", badge:"Platform", badgeKind:"free", tags:["funraise"], icon:"platform",
+      action:{ type:"link", urlKey:"FUNRAISE_URL" } },
+
+    { id:"classy", name:"Classy", desc:"Fundraising page link.", category:"platform", badge:"Platform", badgeKind:"free", tags:["classy"], icon:"platform",
+      action:{ type:"link", urlKey:"CLASSY_URL" } },
+
+    { id:"fundraiseup", name:"Fundraise Up", desc:"Donation page link.", category:"platform", badge:"Platform", badgeKind:"free", tags:["fundraiseup"], icon:"platform",
+      action:{ type:"link", urlKey:"FUNDRAISEUP_URL" } },
+
+    { id:"zeffy", name:"Zeffy", desc:"Donation page link.", category:"platform", badge:"Platform", badgeKind:"pop", tags:["zeffy"], icon:"platform",
+      action:{ type:"link", urlKey:"ZEFFY_URL" } },
+
+    { id:"givelively", name:"Give Lively", desc:"Donation page link.", category:"platform", badge:"Platform", badgeKind:"free", tags:["givelively"], icon:"platform",
+      action:{ type:"link", urlKey:"GIVELIVELY_URL" } },
+
+    { id:"eventbrite", name:"Eventbrite", desc:"Event/tickets link.", category:"platform", badge:"Platform", badgeKind:"free", tags:["eventbrite"], icon:"platform",
+      action:{ type:"link", urlKey:"EVENTBRITE_URL" } }
+  ];
+
+  // ---- DOM (DECLARED ONCE) ----
+  const overlay = document.getElementById("donateOverlay");
+  const openBtn = document.getElementById("openDonate");
+  const closeBtn = document.getElementById("closeDonate");
+  const listEl = document.getElementById("methodList");
+  const searchInput = document.getElementById("searchInput");
+  const visibleCountEl = document.getElementById("visibleCount");
+
+  const toast = document.getElementById("toast");
+  const toastTitle = document.getElementById("toastTitle");
+  const toastBody = document.getElementById("toastBody");
+
+  const details = document.getElementById("details");
+  const detailsTitle = document.getElementById("detailsTitle");
+  const detailsSubtitle = document.getElementById("detailsSubtitle");
+  const detailsBody = document.getElementById("detailsBody");
+  const detailsActions = document.getElementById("detailsActions");
+  const detailsClose = document.getElementById("detailsClose");
+
+  let lastFocus = null;
+  let toastTimer = null;
+
+  // ---- Icons ----
+  const ICONS = {
+    card: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3.5 8.2h17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 5h14a2.5 2.5 0 0 1 2.5 2.5v9A2.5 2.5 0 0 1 19 19H5A2.5 2.5 0 0 1 2.5 16.5v-9A2.5 2.5 0 0 1 5 5Z" stroke="currentColor" stroke-width="2"/><path d="M6.5 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+    paypal: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 20h3.3a4.7 4.7 0 0 0 4.6-3.7l.7-3.4A4 4 0 0 0 11.7 8H8.2L7 20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8.2 9.6 5.4A3 3 0 0 1 12.5 3H15a4 4 0 0 1 3.9 4.8l-.4 1.9A4.3 4.3 0 0 1 14.3 13H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+    gpay: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M7 7.5h10a3.5 3.5 0 0 1 0 7H10.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.5 14.5H7.8A2.8 2.8 0 0 0 5 17.3V20h5.5v-5.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 11h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`,
+    bank: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 10h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 10v8M10 10v8M14 10v8M18 10v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 10 12 4l9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+    crypto: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2v20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.2 6.2h6.6a3 3 0 0 1 0 6H8.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.2 12.2h7a3.2 3.2 0 0 1 0 6.4H8.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+    qr: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 14h2v2h-2v-2Zm4 0h2v6h-6v-2h4v-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 18h2v2h-2v-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
+    platform: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M7 7v12M17 7v12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6.5 19h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 11h6M9 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+    spark: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2l1.2 5.2L18 9l-4.8 1.8L12 16l-1.2-5.2L6 9l4.8-1.8L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M19 14l.7 2.4L22 17l-2.3.6L19 20l-.7-2.4L16 17l2.3-.6L19 14Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`
+  };
+
+  function badgeHTML(m){
+    if (!m.badge) return "";
+    return `<span class="badge ${m.badgeKind || ""}">${escapeHTML(m.badge)}</span>`;
+  }
+
+    function methodCard(m){
+      const icon = ICONS[m.icon] || ICONS.platform;
+      const disabled = (m.action?.type === "disabled") || (m.badgeKind === "soon");
+      return `<button class="method" type="button"
+    data-id="${escapeAttr(m.id)}"
+    data-category="${escapeAttr(m.category)}"
+    data-name="${escapeAttr(m.name)}"
+    data-desc="${escapeAttr(m.desc)}"
+    data-tags="${escapeAttr((m.tags||[]).join(" "))}"
+    ${disabled ? `aria-disabled="true" tabindex="-1"` : ``}
+  >
+    <span class="m-left">
+      <span class="m-icon" aria-hidden="true">${icon}</span>
+      <span class="m-text">
+        <span class="m-name">${escapeHTML(m.name)}</span>
+      </span>
+    </span>
+        <span class="m-right">
+          ${badgeHTML(m)}
+          <svg class="chev" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+    `;
+  }
+
+  function render(){
+    listEl.innerHTML = METHODS.map(methodCard).join("");
+    attachHandlers();
+    applyFilters();
+  }
+
+
+  function applyFilters(){
+    const q = (searchInput.value || "").trim().toLowerCase();
+    const cards = Array.from(listEl.querySelectorAll(".method"));
+    let visible = 0;
+
+    for (const el of cards){
+      const hay = `${el.dataset.name||""} ${el.dataset.desc||""} ${el.dataset.tags||""}`.toLowerCase();
+      const qOK = q ? hay.includes(q) : true;
+      const show = qOK;
+
+      el.style.display = show ? "" : "none";
+      if (show) visible++;
+    }
+    visibleCountEl.textContent = String(visible);
+  }
+
+  function showToast(title, body){
+    toastTitle.textContent = title;
+    toastBody.textContent = body;
+    toast.dataset.show = "true";
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { toast.dataset.show = "false"; }, 2600);
+  }
+
+  async function copyText(text){
+    try{
+      if (navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    }catch(_){}
+    try{
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.left = "-9999px";
+      ta.style.top = "0";
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return !!ok;
+    }catch(_){
+      return false;
+    }
+  }
+
+  function openDetails(title, subtitle, body, actions){
+    detailsTitle.textContent = title;
+    detailsSubtitle.textContent = subtitle;
+    detailsBody.textContent = body;
+    detailsActions.innerHTML = "";
+
+    actions.forEach(act => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "mini-btn";
+      b.textContent = act.label;
+
+      if (act.kind === "link"){
+        b.addEventListener("click", () => { window.open(act.url, "_blank", "noopener,noreferrer"); });
+      } else if (act.kind === "copy"){
+        b.addEventListener("click", async () => {
+          const ok = await copyText(act.text);
+          showToast(ok ? "Copied" : "Copy failed", ok ? "Copied to clipboard." : "Clipboard blocked.");
+        });
+      }
+      detailsActions.appendChild(b);
+    });
+
+    if (!actions.length){
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "mini-btn secondary";
+      b.textContent = "Copy";
+      b.addEventListener("click", async () => {
+        const ok = await copyText(detailsBody.textContent || "");
+        showToast(ok ? "Copied" : "Copy failed", ok ? "Copied to clipboard." : "Clipboard blocked.");
+      });
+      detailsActions.appendChild(b);
+    }
+
+    details.dataset.open = "true";
+  }
+
+  function closeDetails(){
+    details.dataset.open = "false";
+  }
+
+  function attachHandlers(){
+    const cards = Array.from(listEl.querySelectorAll(".method"));
+    cards.forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        const m = METHODS.find(x => x.id === id);
+        if (!m) return;
+
+        if (btn.getAttribute("aria-disabled") === "true"){
+          showToast("Coming soon", `${m.name} isn’t wired up yet.`);
+          return;
+        }
+
+        const a = m.action || {};
+        if (a.type === "link"){
+          const url = CONFIG[a.urlKey] || "";
+          if (!url){
+            showToast("Missing URL", `Paste a link into CONFIG.${a.urlKey}`);
+            return;
+          }
+          window.location.href = url;
+          return;
+        }
+
+        if (a.type === "modal"){
+          if (a.bodyKey === "__QR__"){
+            const qr = (CONFIG.QR_IMAGE_URL || "").trim();
+            if (!qr){
+              openDetails("QR not set", "Add CONFIG.QR_IMAGE_URL", "No QR image URL found.\n\nSet CONFIG.QR_IMAGE_URL to a hosted PNG/JPG.", []);
+              return;
+            }
+            detailsTitle.textContent = "Scan to donate";
+            detailsSubtitle.textContent = "Use your camera or banking app.";
+            detailsBody.innerHTML = `<img src="${escapeAttr(qr)}" style="max-width:100%;border-radius:8px;margin:10px 0;" alt="QR code" />`;
+            detailsActions.innerHTML = "";
+            const b1 = document.createElement("button");
+            b1.type = "button";
+            b1.className = "mini-btn";
+            b1.textContent = "Open QR image";
+            b1.addEventListener("click", () => { window.open(qr, "_blank", "noopener,noreferrer"); });
+            detailsActions.appendChild(b1);
+            const b2 = document.createElement("button");
+            b2.type = "button";
+            b2.className = "mini-btn";
+            b2.textContent = "Copy QR URL";
+            b2.addEventListener("click", async () => {
+              const ok = await copyText(qr);
+              showToast(ok ? "Copied" : "Copy failed", ok ? "Copied to clipboard." : "Clipboard blocked.");
+            });
+            detailsActions.appendChild(b2);
+            details.dataset.open = "true";
+            return;
+          }
+
+          const body = CONFIG[a.bodyKey] || "";
+          if (!body){
+            showToast("Missing details", `Fill CONFIG.${a.bodyKey}`);
+            return;
+          }
+
+          const actions = [];
+          if (a.copyLabel){
+            actions.push({ kind:"copy", label: a.copyLabel, text: body });
+          }
+          openDetails(a.title || m.name, a.subtitle || m.desc, body, actions);
+          return;
+        }
+
+        showToast("No action", "This method doesn’t have an action yet.");
+      });
+    });
+  }
+
+  function openModal(){
+    lastFocus = document.activeElement;
+    overlay.dataset.open = "true";
+    document.body.style.overflow = "hidden";
+    searchInput.value = "";
+    closeDetails();
+    applyFilters();
+    setTimeout(() => searchInput.focus(), 0);
+  }
+
+  function closeModal(){
+    overlay.dataset.open = "false";
+    document.body.style.overflow = "";
+    closeDetails();
+    if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+  }
+
+  function escapeHTML(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+  function escapeAttr(str){
+    return escapeHTML(str).replaceAll("`","&#096;");
+  }
+
+  // ---- Events (using existing consts, NOT redeclaring) ----
+  openBtn.addEventListener("click", openModal);
+  closeBtn.addEventListener("click", closeModal);
+  detailsClose.addEventListener("click", closeDetails);
+
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
+  window.addEventListener("keydown", (e) => {
+    if (overlay.dataset.open === "true" && e.key === "Escape"){
+      e.preventDefault();
+      closeModal();
+    }
+  });
+
+  searchInput.addEventListener("input", applyFilters);
+
+  // ---- Init ----
+  render();
+})();
+</script>
+</body>
+</html>
