@@ -422,7 +422,7 @@
   padding: 14px 18px 18px 18px;
   background: rgba(0,0,0,.22);
   border-top: 1px solid var(--stroke2);
-  max-height: 44%;
+  max-height: 77%;
   overflow:auto;
   z-index: 60;
 }
@@ -854,8 +854,26 @@ ETH: your-eth-address-here`,
               return;
             }
             detailsTitle.textContent = "Scan to donate";
-            detailsSubtitle.textContent = "Use your camera or banking app.";
-            detailsBody.innerHTML = `<img src="${escapeAttr(qr)}" style="max-width:100%;border-radius:8px;margin:10px 0;" alt="QR code" />`;
+            detailsSubtitle.textContent = "Use your camera or a QR code scanner.";
+            detailsBody.innerHTML = `
+  <div style="display:flex;justify-content:center;align-items:center;padding:10px;">
+    <img
+      src="${escapeAttr(qr)}"
+      alt="QR code"
+      style="
+        width: min(260px, 70vw);
+        height: auto;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0,0,0,.35);
+        border: 1px solid rgba(255,255,255,.12);
+        background: rgba(0,0,0,.18);
+      "
+    />
+  </div>
+`;
+
             detailsActions.innerHTML = "";
             const b1 = document.createElement("button");
             b1.type = "button";
